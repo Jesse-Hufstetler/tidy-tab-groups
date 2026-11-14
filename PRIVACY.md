@@ -17,6 +17,7 @@ This information is used in memory at the moment it is needed. It is not saved, 
 
 - **Your settings** (the site-name rules you enter in the options page). These are saved with the browser's extension storage, which your browser may sync between your devices through your browser account (for example your Google or Brave account). That syncing is done by the browser, not by this extension.
 - **Group IDs for the current browser session.** The extension remembers which groups it created, as numbers, so it only disbands those. This is held in session storage and is erased when the browser closes.
+- **Names and colors of groups it created.** Group IDs change when the browser restarts, so the extension also remembers the name and color of each group it created (for example "Gmail" and red), up to the 300 most recent. This lets it recognize those groups after a restart. It is kept only on your device in the browser's local extension storage, is not synced, and is deleted when you uninstall the extension.
 
 ## What the extension does not do
 

@@ -9,18 +9,45 @@ const DISBAND_DELAY_MS = 100;
 
 // This extension only ever touches groups it created itself: it adds tabs to them and
 // disbands them. Groups made by anything else (Claude in Chrome, other AI agents, other
-// extensions, you) are never changed, whatever they are called.
+// extensions, you) are never changed.
 //
-// IDs of the groups it created. Session storage survives the service worker being
-// stopped, and clears when the browser closes (group IDs aren't stable across restarts).
-async function getOwned() {
+// A group counts as ours in two ways:
+//  1. Its ID is in this session's list. Session storage survives the service worker being
+//     stopped, and clears when the browser closes.
+//  2. After a restart group IDs change, so we also remember the name + color of every group
+//     we create (local storage, never synced). A restored group with the same name and
+//     color is ours. Rename or recolor one and we stop treating it as ours.
+const MAX_SIGNATURES = 300;
+
+const signatureOf = (g) => (g.title ? `${g.title}\u0000${g.color}` : "");
+
+async function getOwnedIds() {
   const { ownedGroups = [] } = await chrome.storage.session.get("ownedGroups");
   return ownedGroups;
 }
 
+async function getSignatures() {
+  const { ownedSignatures = [] } = await chrome.storage.local.get("ownedSignatures");
+  return ownedSignatures;
+}
+
+// Call once the group has its final name and color.
 async function markOwned(groupId) {
-  const owned = await getOwned();
-  if (!owned.includes(groupId)) await chrome.storage.session.set({ ownedGroups: [...owned, groupId] });
+  const ids = await getOwnedIds();
+  if (!ids.includes(groupId)) await chrome.storage.session.set({ ownedGroups: [...ids, groupId] });
+
+  const sig = signatureOf(await chrome.tabGroups.get(groupId));
+  if (sig) {
+    const sigs = (await getSignatures()).filter((s) => s !== sig);
+    sigs.push(sig);
+    await chrome.storage.local.set({ ownedSignatures: sigs.slice(-MAX_SIGNATURES) });
+  }
+}
+
+async function ownership() {
+  const ids = new Set(await getOwnedIds());
+  const sigs = new Set(await getSignatures());
+  return (group) => ids.has(group.id) || (!!group.title && sigs.has(signatureOf(group)));
 }
 
 async function getSettings() {
@@ -325,17 +352,18 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener(async (details) => {
     if (!/^https?:/i.test(opener.url || "")) return; // skip brave://, chrome://, extension pages
 
     if (opener.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) {
-      if (!(await getOwned()).includes(opener.groupId)) return; // not ours: leave it alone
+      const owns = await ownership();
+      if (!owns(await chrome.tabGroups.get(opener.groupId))) return; // not ours: leave it alone
       await chrome.tabs.group({ tabIds: tab.id, groupId: opener.groupId });
     } else {
       const groupId = await chrome.tabs.group({ tabIds: [opener.id, tab.id] });
-      await markOwned(groupId);
       const update = {};
       const title = groupName(opener.url, settings);
       if (title) update.title = title;
       const color = await faviconGroupColor(opener.url);
       if (color) update.color = color;
       if (Object.keys(update).length) await chrome.tabGroups.update(groupId, update);
+      await markOwned(groupId); // after naming, so the remembered name and color are final
     }
   } catch (e) {
     console.debug("auto-group skipped:", e);
@@ -352,11 +380,13 @@ function scheduleScan() {
 
 async function scan() {
   try {
-    const existing = new Set((await chrome.tabGroups.query({})).map((g) => g.id));
-    const owned = (await getOwned()).filter((id) => existing.has(id)); // forget vanished groups
-    await chrome.storage.session.set({ ownedGroups: owned });
-    for (const groupId of owned) {
-      const tabs = await chrome.tabs.query({ groupId });
+    const groups = await chrome.tabGroups.query({});
+    const owns = await ownership();
+    const ours = groups.filter(owns);
+    // Keep the session ID list tidy: drop groups that no longer exist.
+    await chrome.storage.session.set({ ownedGroups: ours.map((g) => g.id) });
+    for (const group of ours) {
+      const tabs = await chrome.tabs.query({ groupId: group.id });
       if (tabs.length === 1) await chrome.tabs.ungroup(tabs[0].id);
     }
   } catch (e) {

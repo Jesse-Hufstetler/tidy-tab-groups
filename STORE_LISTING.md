@@ -34,10 +34,10 @@ FEATURES
 - Settings sync across your browsers through your browser account.
 
 PRIVACY
-Everything runs locally in your browser. The extension makes no network requests, has no analytics, and does not collect, store or transmit your browsing data. It saves only your settings.
+Everything runs locally in your browser. The extension makes no network requests, has no analytics, and does not collect, store or transmit your browsing data. It saves only your settings and the names and colors of the groups it created.
 
 HOW IT DECIDES WHAT TO DISBAND
-Tidy Tab Groups remembers which groups it created during the current browser session. Only those are ever disbanded or added to. Groups from before the session, or made by anything else, are left alone.
+Tidy Tab Groups remembers the groups it created, including their name and color so it still recognizes them after you restart the browser. Only those are ever disbanded or added to. Groups made by anything else are left alone. If you rename or recolor one of its groups, it stops treating that group as its own.
 
 Works in Chrome and other Chromium browsers that support tab groups, such as Brave and Edge.
 
@@ -56,7 +56,7 @@ Needed to read, title and color tab groups and to find which groups exist, so th
 Needed to tell a tab opened from a link or window.open() apart from a plain new tab (Ctrl+T, the + button). Both kinds of tab report an opener, so only the navigation event can distinguish them. Without it, a plain new tab would wrongly be grouped with whatever tab was open.
 
 **storage**
-Needed to save the user's site-name rules (options page) and, for the current browser session only, the IDs of groups the extension created. No browsing data is stored.
+Needed to save the user's site-name rules (options page) and to remember which tab groups the extension created: their IDs for the current session, and their name and color (for example "Gmail", red) so they are still recognized after a browser restart. Stored on the device only; nothing is sent anywhere. No page URLs or page content are stored.
 
 **favicon**
 Needed to read the favicon of the tab a link was opened from, from the browser's own favicon cache, so a new group can be colored to match. No network request is made and no site access is needed.

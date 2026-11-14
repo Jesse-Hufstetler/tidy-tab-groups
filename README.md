@@ -7,6 +7,8 @@ A Chrome/Brave/Edge extension (Manifest V3) that keeps tab groups tidy:
 - Groups are named after the site ("Gmail", "Sheets", "Messenger") and colored to match the site's icon.
 - It only ever adds tabs to, or disbands, groups it created itself. Groups made by Claude in Chrome, other AI agents, other extensions, or by hand are left alone.
 
+"Created itself" is tracked by group ID during a session. IDs change on restart, so it also remembers the name and color of each group it makes (in local storage, up to 300) and treats a restored group with the same name and color as its own. A group you rename or recolor stops being treated as its own.
+
 Ordinary new tabs (Ctrl+T, the + button), pinned tabs, and links opened from browser pages like `chrome://extensions` are never grouped.
 
 ## Naming rules
