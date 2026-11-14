@@ -11,7 +11,7 @@ To do its job, the extension reads, locally in your browser:
 - the favicon of that tab, from your browser's own cache, to choose a group color
 - which tabs belong to which tab groups, and the titles of those groups, to decide whether a group has only one tab left and whether it is one the extension created
 
-This information is used in memory at the moment it is needed. It is not saved, logged, or sent anywhere.
+The URLs and favicons themselves are used in memory at the moment they are needed. They are not saved, logged, or sent anywhere. The only thing kept from them is the resulting group name and color (see below).
 
 ## What the extension stores
 
@@ -21,7 +21,7 @@ This information is used in memory at the moment it is needed. It is not saved, 
 
 ## What the extension does not do
 
-- It does not collect, transmit, sell or share any data.
+- It does not send, sell or share any data. Nothing leaves your device apart from your settings being synced by the browser itself, as described above.
 - It does not make network requests.
 - It does not use analytics, advertising, or tracking of any kind.
 - It does not read page content.

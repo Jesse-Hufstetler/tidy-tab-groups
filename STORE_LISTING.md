@@ -34,7 +34,7 @@ FEATURES
 - Settings sync across your browsers through your browser account.
 
 PRIVACY
-Everything runs locally in your browser. The extension makes no network requests, has no analytics, and does not collect, store or transmit your browsing data. It saves only your settings and the names and colors of the groups it created.
+Everything runs locally in your browser. The extension makes no network requests, has no analytics, and does not send any data off your device. It does store a little on your device: your site-name rules, and the names and colors of the groups it created (for example "Gmail", red), so it can recognize them after a restart. It does not store page URLs, page content, or your history.
 
 HOW IT DECIDES WHAT TO DISBAND
 Tidy Tab Groups remembers the groups it created, including their name and color so it still recognizes them after you restart the browser. Only those are ever disbanded or added to. Groups made by anything else are left alone. If you rename or recolor one of its groups, it stops treating that group as its own.
@@ -47,7 +47,7 @@ Automatically organizes browser tabs into tab groups, and removes tab groups it 
 ## Permission justifications (Privacy practices tab)
 
 **tabs**
-Needed to read the URL of the tab a link was opened from (to name the new group and pick its favicon color), to look up which tabs are in a group, and to ungroup a tab when its group is down to one tab. The URLs are used in memory only and are not stored or sent anywhere.
+Needed to read the URL of the tab a link was opened from (to name the new group and pick its favicon color), to look up which tabs are in a group, and to ungroup a tab when its group is down to one tab. The URLs themselves are used in memory only and are not stored or sent anywhere. Only the resulting group name and color are remembered (see "storage" below).
 
 **tabGroups**
 Needed to read, title and color tab groups and to find which groups exist, so the extension can name and color the groups it creates and identify groups that have only one tab left.
@@ -66,7 +66,7 @@ Needed to read the favicon of the tab a link was opened from, from the browser's
 **Remote code:** no. All code is in the package.
 
 ## Data usage disclosures (Privacy practices tab)
-Tick none of the data-collection categories. The extension does not collect or transmit any user data.
+Tick none of the data-collection categories. The extension does not send any user data off the device. The small amount it keeps on the device (site-name rules, and the names and colors of groups it created) never leaves it.
 
 Then tick all three certifications:
 - I do not sell or transfer user data to third parties outside of the approved use cases.
