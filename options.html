@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tidy Tab Groups</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page-bg: #d61e84;                      /* the icon's pink */
+    --card-bg: #ffffff;
+    --card-text: #1b1b1b;
+    --accent: #d61e84;                       /* focus ring */
+    --accent-text: #b0126b;                  /* card headings */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page-bg: #6e1049;                    /* deep magenta, easier on dark setups */
+      --card-bg: #1f1f23;
+      --card-text: #e8e8ea;
+      --accent: #ee4fa6;
+      --accent-text: #f58cc6;
+    }
+  }
+  body { background: var(--page-bg); font: 14px system-ui, sans-serif; margin: 0; padding: 14px; width: 360px; box-sizing: border-box; }
+  h1 { font-size: 16px; margin: 0 0 10px; color: #fff; }
+  .card { background: var(--card-bg); color: var(--card-text); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+  .card h2 { font-size: 13px; margin: 0 0 8px; color: var(--accent-text); }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  textarea {
+    display: block; width: 100%; box-sizing: border-box; height: 48px; font: 12px ui-monospace, Consolas, monospace;
+    resize: none;               /* fixed size: the popup stays the same size */
+    white-space: pre; overflow: auto; /* long lines or extra lines scroll */
+  }
+  small { display: block; margin-top: 6px; line-height: 1.4; opacity: .7; }
+  code { font-size: 12px; }
+  #status { height: 1.2em; margin-top: -4px; color: #fff; opacity: .85; }
+</style>
+</head>
+<body>
+<h1>Tidy Tab Groups</h1>
+
+<div class="card">
+  <h2>Group names</h2>
+  <textarea id="nameOverrides" wrap="off" spellcheck="false" placeholder="mail.google.com = Gmail&#10;facebook.com/messages = Messenger"></textarea>
+  <small>One per line: <code>address = Name</code>. A group is named after the site you opened the link from. Your lines come first, then a built-in list of well-known sites, then the plain domain.</small>
+  <small>An address also covers its subdomains: <code>example.com</code> matches <code>shop.example.com</code>. Add a path to name just part of a site, like <code>facebook.com/messages = Messenger</code>. If several lines fit a page, the most specific address wins (the longer domain, then the longer path). If two are equally specific, the lower line wins.</small>
+</div>
+
+<div id="status"></div>
+<script src="options.js"></script>
+</body>
+</html>
