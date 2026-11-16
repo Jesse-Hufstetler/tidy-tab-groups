@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Tidy Tab Groups",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Groups a tab with the tab it was opened from, and disbands groups left with one tab, without touching groups made by AI agents.",
-  "permissions": ["tabs", "tabGroups", "storage", "webNavigation", "favicon"],
+  "permissions": ["tabGroups", "storage", "webNavigation", "favicon"],
   "background": { "service_worker": "background.js" },
   "options_ui": { "page": "options.html", "open_in_tab": false },
   "action": { "default_title": "Tidy Tab Groups", "default_popup": "options.html" },

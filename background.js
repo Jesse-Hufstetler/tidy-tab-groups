@@ -349,7 +349,12 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener(async (details) => {
     ]);
     if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) return;
     if (tab.pinned || opener.pinned || opener.windowId !== tab.windowId) return;
-    if (!/^https?:/i.test(opener.url || "")) return; // skip brave://, chrome://, extension pages
+
+    // The opener's page URL comes from webNavigation, so the "tabs" permission isn't needed
+    // (Tab.url is only filled in when that permission is granted).
+    const frame = await chrome.webNavigation.getFrame({ tabId: opener.id, frameId: 0 });
+    const openerUrl = frame?.url || "";
+    if (!/^https?:/i.test(openerUrl)) return; // skip brave://, chrome://, extension pages
 
     if (opener.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) {
       const owns = await ownership();
@@ -358,9 +363,9 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener(async (details) => {
     } else {
       const groupId = await chrome.tabs.group({ tabIds: [opener.id, tab.id] });
       const update = {};
-      const title = groupName(opener.url, settings);
+      const title = groupName(openerUrl, settings);
       if (title) update.title = title;
-      const color = await faviconGroupColor(opener.url);
+      const color = await faviconGroupColor(openerUrl);
       if (color) update.color = color;
       if (Object.keys(update).length) await chrome.tabGroups.update(groupId, update);
       await markOwned(groupId); // after naming, so the remembered name and color are final

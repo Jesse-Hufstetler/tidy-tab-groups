@@ -39,7 +39,7 @@ Turn off any other tab-grouping extension first, or they will fight.
 
 ## Permissions
 
-`tabs`, `tabGroups`, `webNavigation`, `storage` and `favicon`. No host permissions, no network requests. See `PRIVACY.md`.
+`tabGroups`, `webNavigation`, `storage` and `favicon`. The `tabs` permission isn't requested: the opener page's URL comes from `webNavigation.getFrame`. No host permissions, no network requests. See `PRIVACY.md`.
 
 ## License
 

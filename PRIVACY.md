@@ -29,7 +29,7 @@ The URLs and favicons themselves are used in memory at the moment they are neede
 
 ## Permissions
 
-The extension requests the `tabs`, `tabGroups`, `webNavigation`, `storage` and `favicon` permissions. Each is used only for the purpose described above. It requests no access to website data.
+The extension requests the `tabGroups`, `webNavigation`, `storage` and `favicon` permissions. Each is used only for the purpose described above. It requests no access to website data.
 
 ## Changes
 

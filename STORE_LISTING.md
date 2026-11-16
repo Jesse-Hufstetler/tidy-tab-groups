@@ -46,14 +46,11 @@ Automatically organizes browser tabs into tab groups, and removes tab groups it 
 
 ## Permission justifications (Privacy practices tab)
 
-**tabs**
-Needed to read the URL of the tab a link was opened from (to name the new group and pick its favicon color), to look up which tabs are in a group, and to ungroup a tab when its group is down to one tab. The URLs themselves are used in memory only and are not stored or sent anywhere. Only the resulting group name and color are remembered (see "storage" below).
-
 **tabGroups**
 Needed to read, title and color tab groups and to find which groups exist, so the extension can name and color the groups it creates and identify groups that have only one tab left.
 
 **webNavigation**
-Needed to tell a tab opened from a link or window.open() apart from a plain new tab (Ctrl+T, the + button). Both kinds of tab report an opener, so only the navigation event can distinguish them. Without it, a plain new tab would wrongly be grouped with whatever tab was open.
+Needed for two things. First, to tell a tab opened from a link or window.open() apart from a plain new tab (Ctrl+T, the + button): both report an opener, so only the navigation event can distinguish them, and without it a plain new tab would wrongly be grouped with whatever tab was open. Second, to read the URL of the page a link was opened from, so the new group can be named after that site and colored from its favicon. That URL is used in memory only and is not stored or sent anywhere; only the resulting group name and color are remembered (see "storage" below).
 
 **storage**
 Needed to save the user's site-name rules (options page) and to remember which tab groups the extension created: their IDs for the current session, and their name and color (for example "Gmail", red) so they are still recognized after a browser restart. Stored on the device only; nothing is sent anywhere. No page URLs or page content are stored.
